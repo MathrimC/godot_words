@@ -11,7 +11,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_l31ak")
-letters_button = NodePath("MarginContainer/HBoxContainer/Button")
+letters_button = NodePath("MarginContainer/HBoxContainer/New")
 letters_label = NodePath("MarginContainer/HBoxContainer/Label")
 input = NodePath("MarginContainer/HBoxContainer/LineEdit")
 response_label = NodePath("MarginContainer/HBoxContainer/ResponseLabel")
@@ -30,9 +30,9 @@ theme_override_constants/margin_bottom = 10
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="Button" type="Button" parent="MarginContainer/HBoxContainer"]
+[node name="New" type="Button" parent="MarginContainer/HBoxContainer"]
 layout_mode = 2
-text = "Niewe letters"
+text = "New letters"
 
 [node name="Label" type="Label" parent="MarginContainer/HBoxContainer"]
 layout_mode = 2
@@ -44,8 +44,13 @@ layout_mode = 2
 [node name="ResponseLabel" type="Label" parent="MarginContainer/HBoxContainer"]
 layout_mode = 2
 
+[node name="Reveal" type="Button" parent="MarginContainer/HBoxContainer"]
+layout_mode = 2
+text = "Reveal"
+
 [node name="WordsNode" type="Node" parent="."]
 script = ExtResource("2_80a2b")
 
-[connection signal="pressed" from="MarginContainer/HBoxContainer/Button" to="." method="on_letters_button_pressed"]
+[connection signal="pressed" from="MarginContainer/HBoxContainer/New" to="." method="on_letters_button_pressed"]
 [connection signal="text_submitted" from="MarginContainer/HBoxContainer/LineEdit" to="." method="on_input_submit"]
+[connection signal="pressed" from="MarginContainer/HBoxContainer/Reveal" to="." method="on_reveal_pressed"]
