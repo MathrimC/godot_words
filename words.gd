@@ -1,7 +1,12 @@
 class_name WordsNode
 extends Node
 
-const words_path := "res://woordenlijst.txt"
+const nl_wordlist_path := "res://wordlists/nl_wordlist.txt"
+const en_wordlist_path := ["res://wordlists/en_wordlist_part1.txt", "res://wordlists/en_wordlist_part1.txt"]
+
+enum Language { NL, EN }
+
+@export var language: Language
 
 var words: Array[String]
 var letters: String
@@ -46,14 +51,39 @@ func check_word(word: String) -> bool:
 	else:
 		return false
 
+func get_answers() -> Array[String]:
+	var answers: Array[String] = []
+	_get_answers("", letters, answers)
+	return answers
+
+func _get_answers(word: String, remaining_letters: String, answers: Array[String]) -> void:
+	# print("checking word %s" % word)
+	var index := 0
+	for letter in remaining_letters:
+		var new_word := word + letter
+		var new_letters := remaining_letters.erase(index,1)
+		var lookup := words[words.bsearch(new_word)]
+		if !answers.has(new_word) && lookup == new_word:
+			answers.append(new_word)
+		if lookup.begins_with(new_word):
+			_get_answers(new_word, new_letters, answers)
+		index += 1
+
 ## Returns the correct word using all the letters
 func get_longest_answer() -> String:
 	return longest_answer
 
 func _load_words() -> void:
-	var file := FileAccess.open(words_path, FileAccess.ModeFlags.READ)
+	match language:
+		Language.NL:
+			_load_nl_words()
+		Language.EN:
+			_load_en_words()
+
+func _load_nl_words() -> void:
+	var file := FileAccess.open(nl_wordlist_path, FileAccess.ModeFlags.READ)
 	var regex = RegEx.new()
-	regex.compile("[1234567890.]")
+	regex.compile("[0-9A-Z.-]")
 	while file.get_position() < file.get_length():
 		var word := file.get_line()
 		var result := regex.search(word)
@@ -61,3 +91,12 @@ func _load_words() -> void:
 			continue
 		if word.length() > 1:
 			words.append(word.to_lower())
+
+func _load_en_words() -> void:
+	for path in en_wordlist_path:
+		var file := FileAccess.open(path, FileAccess.ModeFlags.READ)
+		while file.get_position() < file.get_length():
+			var word := file.get_line()
+			if word.length() > 1:
+				words.append(word.to_lower())
+	words.sort()

@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://words_test.gd" id="1_l31ak"]
 [ext_resource type="Script" path="res://words.gd" id="2_80a2b"]
 
-[node name="WordsTest" type="Control" node_paths=PackedStringArray("letters_button", "letters_label", "input", "response_label", "words")]
+[node name="WordsTest" type="Control" node_paths=PackedStringArray("letters_button", "letters_label", "input", "response_label", "words", "labels_container")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -11,11 +11,12 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_l31ak")
-letters_button = NodePath("MarginContainer/HBoxContainer/New")
-letters_label = NodePath("MarginContainer/HBoxContainer/Label")
-input = NodePath("MarginContainer/HBoxContainer/LineEdit")
-response_label = NodePath("MarginContainer/HBoxContainer/ResponseLabel")
+letters_button = NodePath("MarginContainer/VBoxContainer/HBoxContainer/New")
+letters_label = NodePath("MarginContainer/VBoxContainer/HBoxContainer/Label")
+input = NodePath("MarginContainer/VBoxContainer/HBoxContainer/LineEdit")
+response_label = NodePath("MarginContainer/VBoxContainer/HBoxContainer/ResponseLabel")
 words = NodePath("WordsNode")
+labels_container = NodePath("MarginContainer/VBoxContainer/GridContainer")
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 0
@@ -26,31 +27,39 @@ theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="New" type="Button" parent="MarginContainer/HBoxContainer"]
+[node name="New" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 text = "New letters"
 
-[node name="Label" type="Label" parent="MarginContainer/HBoxContainer"]
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 
-[node name="LineEdit" type="LineEdit" parent="MarginContainer/HBoxContainer"]
+[node name="LineEdit" type="LineEdit" parent="MarginContainer/VBoxContainer/HBoxContainer"]
 custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
 
-[node name="ResponseLabel" type="Label" parent="MarginContainer/HBoxContainer"]
+[node name="ResponseLabel" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 
-[node name="Reveal" type="Button" parent="MarginContainer/HBoxContainer"]
+[node name="Reveal" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 text = "Reveal"
+
+[node name="GridContainer" type="GridContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/h_separation = 10
+columns = 5
 
 [node name="WordsNode" type="Node" parent="."]
 script = ExtResource("2_80a2b")
 
-[connection signal="pressed" from="MarginContainer/HBoxContainer/New" to="." method="on_letters_button_pressed"]
-[connection signal="text_submitted" from="MarginContainer/HBoxContainer/LineEdit" to="." method="on_input_submit"]
-[connection signal="pressed" from="MarginContainer/HBoxContainer/Reveal" to="." method="on_reveal_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer/New" to="." method="on_letters_button_pressed"]
+[connection signal="text_submitted" from="MarginContainer/VBoxContainer/HBoxContainer/LineEdit" to="." method="on_input_submit"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer/Reveal" to="." method="on_reveal_pressed"]
